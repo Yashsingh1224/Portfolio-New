@@ -9,7 +9,7 @@ const RESUME_PROJECTS = [
         description: "Accessible mobile banking application using React Native. Features voice-driven navigation and custom NLP command parsing for visually impaired users.",
         tags: ["React Native", "AssemblyAI", "NLP", "Expo"],
         image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1470&auto=format&fit=crop",
-        github: "https://github.com/yash/Banking",
+        github: "https://github.com/Yashsingh1224/Mobile-Banking-App-Working",
         demo: null
     },
     {
@@ -17,7 +17,7 @@ const RESUME_PROJECTS = [
         description: "GenAI platform converting PDFs to editable PPT slides. Uses Google Gemini for text generation and a custom GRU model for document parsing.",
         tags: ["React", "Python", "Google Gemini", "Deep Learning"],
         image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1530&auto=format&fit=crop",
-        github: "https://github.com/yash/voila",
+        github: "https://github.com/Yashsingh1224/AI-PPT-Generator",
         demo: null
     },
     {
@@ -26,7 +26,7 @@ const RESUME_PROJECTS = [
         description: "End-to-end GAN system utilizing DenseNet201 for visual feature extraction and LSTM for linguistically coherent caption generation.",
         tags: ["TensorFlow", "Flask", "Python", "Computer Vision"],
         image: "https://www.intoo.com/wp-content/uploads/sites/5/2025/07/AdobeStock_1030611882.jpeg",
-        github: "https://github.com/yash/GenAl",
+        github: "https://github.com/Yashsingh1224/Image-caption-generator",
         demo: null
     },
     {
@@ -34,7 +34,7 @@ const RESUME_PROJECTS = [
         description: "Music streaming platform with SQL database integration. Implements content-based and collaborative filtering for personalized song suggestions.",
         tags: ["Java", "MySQL", "JavaFX", "Algorithms"],
         image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1470&auto=format&fit=crop",
-        github: "https://github.com/yash/Music",
+        github: "https://github.com/Yashsingh1224/Java-Music-Player",
         demo: null
     }
 ];
