@@ -30,7 +30,7 @@ function AnimatedSphere() {
 const Hero3D = () => {
     return (
         <div className="h-[400px] w-full lg:h-[600px] lg:w-[600px] relative cursor-move">
-            <Canvas>
+            <Canvas className="canvas" dpr={[1, 1.5]}>
                 <ambientLight intensity={1} />
                 <directionalLight position={[3, 2, 1]} />
                 <AnimatedSphere />

@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, Float, Stars, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-// --- Data ---
+// --- Resume Data Extraction & Orbit Configuration ---
 const SKILL_ORBITS = [
     {
         radius: 2.8,
@@ -37,10 +37,7 @@ const SKILL_ORBITS = [
     }
 ];
 
-// --- Shared Reusable Assets (Performance Boost) ---
-const sharedSphereGeo = new THREE.SphereGeometry(0.35, 16, 16); // Lower polygon count
-
-// --- 1. The Skill Sphere ---
+// --- 1. The Skill Sphere (Electron) ---
 const SkillSphere = ({ radius, speed, angle, color, name }) => {
     const sphereRef = useRef();
 
@@ -52,29 +49,23 @@ const SkillSphere = ({ radius, speed, angle, color, name }) => {
         if (sphereRef.current) {
             sphereRef.current.position.set(x, 0, z);
             sphereRef.current.rotation.y += 0.02;
+            sphereRef.current.rotation.x += 0.01;
         }
     });
 
     return (
         <group>
-            <mesh
-                ref={sphereRef}
-                geometry={sharedSphereGeo} // Reusing geometry
-            >
-                {/* Using meshStandardMaterial is fine, but we optimize by not recreating it 
-                   if we didn't have dynamic colors. Since colors vary, we keep it inline,
-                   but the low-poly geometry saves us here.
-                */}
+            <mesh ref={sphereRef}>
+                {/* OPTIMIZATION: Reduced segments from 32 to 16 for better mobile performance */}
+                <sphereGeometry args={[0.35, 16, 16]} />
                 <meshStandardMaterial
                     color={color}
                     metalness={0.6}
                     roughness={0.2}
                     emissive={color}
-                    emissiveIntensity={0.4}
+                    emissiveIntensity={0.3}
                 />
-
-                {/* occlusion adds performance by hiding HTML when behind objects */}
-                <Html position={[0, 0.5, 0]} center distanceFactor={10} zIndexRange={[100, 0]} occlusion>
+                <Html position={[0, 0.5, 0]} center distanceFactor={10} zIndexRange={[100, 0]}>
                     <div className="bg-black/60 dark:bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/10 text-white text-[10px] md:text-xs font-semibold whitespace-nowrap select-none shadow-lg pointer-events-none">
                         {name}
                     </div>
@@ -84,22 +75,23 @@ const SkillSphere = ({ radius, speed, angle, color, name }) => {
     );
 };
 
-// --- 2. The Orbit Ring ---
+// --- 2. The Orbit Ring (Visible Path) ---
 const OrbitPath = ({ radius, color }) => {
     return (
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[radius - 0.02, radius + 0.02, 48]} /> {/* Reduced segments from 64 to 48 */}
+            {/* OPTIMIZATION: Reduced segments from 64 to 32 */}
+            <ringGeometry args={[radius - 0.02, radius + 0.02, 32]} />
             <meshBasicMaterial color={color} opacity={0.15} transparent side={THREE.DoubleSide} />
         </mesh>
     );
 };
 
-// --- 3. The Central Core ---
+// --- 3. The Central Core (Nucleus) ---
 const AtomCore = () => {
     return (
         <Float speed={2} rotationIntensity={1} floatIntensity={0.5}>
             <mesh scale={[1.2, 1.2, 1.2]}>
-                <icosahedronGeometry args={[1, 0]} /> {/* 0 detail level = lowest poly count */}
+                <icosahedronGeometry args={[1, 1]} />
                 <meshStandardMaterial
                     color="#3b82f6"
                     emissive="#3b82f6"
@@ -109,8 +101,9 @@ const AtomCore = () => {
                     opacity={0.2}
                 />
             </mesh>
+
             <mesh>
-                <sphereGeometry args={[0.6, 16, 16]} /> {/* Reduced segments */}
+                <sphereGeometry args={[0.6, 32, 32]} />
                 <meshStandardMaterial
                     color="#60a5fa"
                     emissive="#2563eb"
@@ -118,6 +111,7 @@ const AtomCore = () => {
                     toneMapped={false}
                 />
             </mesh>
+
             <pointLight distance={8} intensity={4} color="#3b82f6" />
         </Float>
     );
@@ -131,9 +125,9 @@ const TechScene = () => {
 
     return (
         <>
-            {/* Optimized Lighting: Ambient + one main light is usually enough for this style */}
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} />
+            <ambientLight intensity={0.3} />
+            <pointLight position={[10, 10, 10]} intensity={1} color="#ffffff" />
+            <spotLight position={[-10, 0, -10]} intensity={2} color="#8b5cf6" angle={0.5} />
 
             <group scale={scale}>
                 <AtomCore />
@@ -157,8 +151,8 @@ const TechScene = () => {
                 ))}
             </group>
 
-            {/* Reduced count and depth for performance */}
-            <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
+            {/* OPTIMIZATION: Reduced star count and depth for mobile */}
+            <Stars radius={100} depth={50} count={isMobile ? 1500 : 5000} factor={4} saturation={0} fade speed={1} />
 
             <OrbitControls
                 enableZoom={false}
@@ -175,7 +169,8 @@ const TechScene = () => {
 // --- 5. Exported Component ---
 const TechStack = () => {
     return (
-        <section className="relative w-full h-[600px] md:h-[800px] bg-gray-50 dark:bg-black overflow-hidden flex flex-col items-center justify-center">
+        <section className="relative w-full h-[500px] md:h-[800px] bg-gray-50 dark:bg-black overflow-hidden flex flex-col items-center justify-center">
+
             <div className="absolute top-10 z-10 text-center px-4 pointer-events-none">
                 <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
                     Tech Universe
@@ -186,11 +181,19 @@ const TechStack = () => {
             </div>
 
             <div className="w-full h-full absolute inset-0 cursor-move">
-                {/* dpr={[1, 2]} clamps pixel ratio to avoid over-rendering on high-res screens */}
-                <Canvas camera={{ position: [0, 2, 9], fov: 50 }} dpr={[1, 2]}>
+                {/* CRITICAL FIX: 
+                   1. dpr={[1, 1.5]} caps the resolution at 1.5x (prevents 4x rendering on mobile).
+                   2. gl={{ antialias: false }} improves performance significantly.
+                */}
+                <Canvas
+                    camera={{ position: [0, 2, 9], fov: 50 }}
+                    dpr={[1, 1.5]}
+                    gl={{ antialias: false, powerPreference: "high-performance" }}
+                >
                     <TechScene />
                 </Canvas>
             </div>
+
         </section>
     );
 };
