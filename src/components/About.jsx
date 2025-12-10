@@ -50,10 +50,10 @@ const About = () => {
                         </h2>
 
                         <p className="mt-4 text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
-                            [cite_start]I am a final-year Computer Science undergraduate at the <strong className="text-gray-900 dark:text-white">University of Petroleum and Energy Studies</strong>[cite: 5].
+                            I am a final-year Computer Science undergraduate at the <strong className="text-gray-900 dark:text-white">University of Petroleum and Energy Studies</strong>.
                             <br /><br />
                             My passion lies in the convergence of Full Stack Engineering and Artificial Intelligence.
-                            [cite_start]From building accessible banking apps [cite: 50] [cite_start]to architecting AI-powered content generators[cite: 56],
+                            From building accessible banking apps to architecting AI-powered content generators,
                             I strive to bridge the gap between complex <span className="text-primary font-mono">AI models</span> and <span className="text-accent font-mono">intuitive UIs</span>.
                         </p>
 
